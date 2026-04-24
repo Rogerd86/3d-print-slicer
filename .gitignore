@@ -1,0 +1,68 @@
+# ─── Python ──────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+.eggs/
+build/
+dist/
+wheels/
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# ─── AI backends (downloaded separately via setup_ai_backends.bat) ──
+# These folders contain cloned repos + multi-GB model weights.
+# Anyone using the app clones them themselves; they don't belong in git.
+ai_backends/
+*.ckpt
+*.safetensors
+*.bin
+*.pth
+*.pt
+
+# ─── App-local state / scratch dirs ─────────────────────────────────
+.claude/
+.codex/
+.remember/
+_codex_pycache_check/
+_scratch/
+_tmp/
+.idea/
+.vscode/
+
+# ─── User data / outputs ────────────────────────────────────────────
+exports_output/
+output/
+outputs/
+*.stl
+*.obj
+*.3mf
+!tests/fixtures/**/*.stl
+!tests/fixtures/**/*.obj
+!tests/fixtures/**/*.3mf
+
+# ─── Presets / projects (user data) ─────────────────────────────────
+presets/
+*.slicerproj
+*.ksproj
+
+# ─── Logs / reports ─────────────────────────────────────────────────
+*.log
+repair_report_*.txt
+
+# ─── OS junk ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Secrets (defensive) ────────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+huggingface_token.txt
