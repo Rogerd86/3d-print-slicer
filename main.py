@@ -25,12 +25,6 @@ def main():
     app.setApplicationName("3D Print Slicer")
     app.setOrganizationName("3D Print Slicer")
 
-    # Load stylesheet
-    style_path = os.path.join(os.path.dirname(__file__), "ui", "style.qss")
-    if os.path.exists(style_path):
-        with open(style_path, "r") as f:
-            app.setStyleSheet(f.read())
-
     window = MainWindow()
     window.show()
 
