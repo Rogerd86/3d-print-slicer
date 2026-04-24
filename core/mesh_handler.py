@@ -151,7 +151,7 @@ class MeshHandler:
             for _ in range(iterations):
                 verts, faces = subdivide(verts, faces)
             self.mesh = trimesh.Trimesh(vertices=verts, faces=faces)
-            self.mesh.apply_translation(-self.mesh.centroid)
+            self._place_on_ground()
             return len(self.mesh.faces), True
         except Exception as e:
             print(f"Subdivide error: {e}")

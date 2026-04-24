@@ -199,18 +199,18 @@ def generate_mesh_sam3d(image_path: str,
         # Build inference script that uses FP16
         script = f"""
 import sys
-sys.path.insert(0, '{sam3d_path.replace(os.sep, "/")}')
+sys.path.insert(0, {repr(sam3d_path.replace(os.sep, "/"))})
 import torch
 from sam3d.inference import Inference
 
 # Load model in FP16 to fit in 16GB VRAM
 model = Inference(device='cuda', dtype=torch.float16)
 result = model.infer(
-    image_path='{image_path.replace(os.sep, "/")}',
-    {'mask_path="' + mask_path.replace(os.sep, "/") + '",' if mask_path else ''}
+    image_path={repr(image_path.replace(os.sep, "/"))},
+    {'mask_path=' + repr(mask_path.replace(os.sep, "/")) + ',' if mask_path else ''}
 )
 # Export as OBJ
-output = '{os.path.join(output_dir, "sam3d_output.obj").replace(os.sep, "/")}'
+output = {repr(os.path.join(output_dir, "sam3d_output.obj").replace(os.sep, "/"))}
 result.export_mesh(output)
 print(f'DONE:{{output}}')
 """
@@ -266,7 +266,7 @@ def generate_mesh_trellis2(image_path: str,
         # Uses FP16 and low-vram mode to fit on 16GB cards
         script = f"""
 import sys, os
-sys.path.insert(0, '{trellis_path.replace(os.sep, "/")}')
+sys.path.insert(0, {repr(trellis_path.replace(os.sep, "/"))})
 os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
 
 import torch
@@ -283,7 +283,7 @@ pipeline = pipeline.to("cuda")
 
 # Run inference
 from PIL import Image
-image = Image.open('{image_path.replace(os.sep, "/")}')
+image = Image.open({repr(image_path.replace(os.sep, "/"))})
 outputs = pipeline(
     image,
     seed=42,
@@ -296,7 +296,7 @@ outputs = pipeline(
 )
 
 # Export mesh as OBJ
-output_path = '{os.path.join(output_dir, output_name + ".obj").replace(os.sep, "/")}'
+output_path = {repr(os.path.join(output_dir, output_name + ".obj").replace(os.sep, "/"))}
 mesh = outputs['mesh'][0]
 mesh.export(output_path)
 print(f'DONE:{{output_path}}')
@@ -356,20 +356,20 @@ def generate_mesh_partcrafter(image_path: str,
 
         script = f"""
 import sys, os
-sys.path.insert(0, '{pc_path.replace(os.sep, "/")}')
+sys.path.insert(0, {repr(pc_path.replace(os.sep, "/"))})
 os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
 
 import torch
 from inference import PartCrafterInference
 
 model = PartCrafterInference(device='cuda', dtype=torch.float16)
-results = model.generate('{image_path.replace(os.sep, "/")}')
+results = model.generate({repr(image_path.replace(os.sep, "/"))})
 
 # Export each part and combined mesh
-output_dir = '{output_dir.replace(os.sep, "/")}'
+output_dir = {repr(output_dir.replace(os.sep, "/"))}
 combined_parts = []
 for i, part_mesh in enumerate(results['meshes']):
-    part_path = os.path.join(output_dir, f'{output_name}_part_{{i:02d}}.obj')
+    part_path = os.path.join(output_dir, {repr(output_name)} + f'_part_{{i:02d}}.obj')
     part_mesh.export(part_path)
     combined_parts.append(part_mesh)
 
@@ -377,7 +377,7 @@ for i, part_mesh in enumerate(results['meshes']):
 import trimesh
 if combined_parts:
     combined = trimesh.util.concatenate(combined_parts)
-    combined_path = os.path.join(output_dir, '{output_name}.obj')
+    combined_path = os.path.join(output_dir, {repr(output_name + ".obj")})
     combined.export(combined_path)
     print(f'DONE:{{combined_path}}')
     print(f'PARTS:{{len(combined_parts)}}')
